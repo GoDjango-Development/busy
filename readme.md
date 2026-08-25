@@ -90,4 +90,4 @@ This utility is intended for **testing, diagnostics, thermal observation, and co
 
 ## License
 
-This project is licensed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+This project is licensed under the **MIT License**.
