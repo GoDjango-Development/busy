@@ -16,6 +16,7 @@ void run_busy(void)
 {
 	long ncpus = sysconf(_SC_NPROCESSORS_ONLN);
 	int c = 0;
+	ncpus = ncpus <= CPU_MAX ? ncpus : CPU_MAX;
 	for (; c < ncpus; c++) {
 		cpus[c] = fork();
 		if (!cpus[c]) {
