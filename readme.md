@@ -11,6 +11,7 @@ The main purpose is to make it easy to observe how CPU temperature changes under
 Build the program:
 
 ```bash
+make prepare
 make
 ```
 
