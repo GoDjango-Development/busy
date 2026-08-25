@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <wait.h>
 #include <signal.h>
 
 #define CPU_MAX 4096
+#define NOCPU_MSG "No CPUs detected."
 
 static pid_t cpus[CPU_MAX];
 static int cpuno;
@@ -17,6 +18,10 @@ void run_busy(void)
 	long ncpus = sysconf(_SC_NPROCESSORS_ONLN);
 	int c = 0;
 	ncpus = ncpus <= CPU_MAX ? ncpus : CPU_MAX;
+	if (ncpus <= 0) {
+		printf("%s\n", NOCPU_MSG);
+		exit(EXIT_FAILURE);
+	}
 	for (; c < ncpus; c++) {
 		cpus[c] = fork();
 		if (!cpus[c]) {
