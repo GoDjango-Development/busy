@@ -80,6 +80,12 @@ On Debian-based systems, install `lm-sensors` with:
 sudo apt install lm-sensors
 ```
 
+## Author
+
+Luis Miguel Arias
+
+lmdelbahia@gmail.com
+
 ## Warning
 
 `busy` intentionally generates a sustained high CPU load.
