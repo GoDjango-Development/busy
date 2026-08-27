@@ -44,7 +44,7 @@ void run_busy(void)
 			else
 				setpgid(0, cpus[0]);
 			chld_busy();
-			_exit(1);
+			_exit(EXIT_SUCCESS);
 		} else if(cpus[c] > 0)
 			cpuno++;
 		else if (cpus[c] == -1)
