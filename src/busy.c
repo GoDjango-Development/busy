@@ -76,13 +76,15 @@ static int crt_bgchilds(int ncpus)
 		pid = fork();
 		if (!pid) {
 			if (setpgid(0, bgpgid) == -1)
-				rc = -1;
+				_exit(EXIT_FAILURE);
 			chld_busy();
 			_exit(EXIT_SUCCESS);
-		} else if (pid > 0)
-			if (setpgid(pid, bgpgid) == -1)
+		} else if (pid > 0) {
+			if (setpgid(pid, bgpgid) == -1) {
+				kill(pid, SIGINT);
 				rc = -1;
-		else
+			}
+		} else
 			rc = -1;
 	}
 	return rc;
