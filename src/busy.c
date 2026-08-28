@@ -82,7 +82,7 @@ static int crt_bgchilds(int ncpus)
 		} else if (pid > 0)
 			if (setpgid(pid, bgpgid) == -1)
 				rc = -1;
-		else if (pid == -1)
+		else
 			rc = -1;
 	}
 	return rc;
