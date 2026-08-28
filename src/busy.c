@@ -16,7 +16,6 @@ static void sig_intr(int signo);
 static void chld_busy(void);
 static int crt_bglead(void);
 static int crt_bgchilds(int ncpus);
-static void rerr(int rc);
 
 void run_busy(void)
 {
