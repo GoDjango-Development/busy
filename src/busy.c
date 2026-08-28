@@ -4,14 +4,11 @@
 #include <wait.h>
 #include <signal.h>
 #include <malloc.h>
-#include <errno.h>
 
 /* Errors */
 #define EFORK_MSG "Forking error. Program may continue running.\n"
 #define ELEAD_MSG "Error creating leader.\n."
 #define ECPU_MSG "Unable to obtaing CPUs quantity.\n"
-
-extern int errno;
 
 static pid_t bgpgid;
 
