@@ -26,12 +26,12 @@ void run_busy(void)
 		exit(EXIT_FAILURE);
 	}
 	int rc = crt_bglead();
-	if (rc == -1) {
+	if (rc) {
 		fprintf(stderr, ELEAD_MSG);
 		exit(EXIT_FAILURE);
 	}
 	rc = crt_bgchilds(ncpus);
-	if (rc == -1)
+	if (rc)
 		fprintf(stderr, EFORK_MSG);
 	signal(SIGINT, sig_intr);
 	while (wait(NULL) > 0);
@@ -76,14 +76,16 @@ static int crt_bgchilds(int ncpus)
 		pid = fork();
 		if (!pid) {
 			if (setpgid(0, bgpgid) == -1)
-				rc = -1;
+				_exit(EXIT_FAILURE);
 			chld_busy();
 			_exit(EXIT_SUCCESS);
-		} else if(pid > 0)
-			if (setpgid(pid, bgpgid) == -1)
+		} else if (pid > 0) {
+			if (setpgid(pid, bgpgid) == -1) {
+				kill(pid, SIGINT);
 				rc = -1;
-		else if (pid == -1)
-			rc = 1;
+			}
+		} else
+			rc = -1;
 	}
 	return rc;
 }
