@@ -9,6 +9,7 @@
 /* Errors */
 #define EFORK_MSG "Forking error. Program may continue running.\n"
 #define ELEAD_MSG "Error creating leader.\n."
+#define ECPU_MSG "Unable to obtaing CPUs quantity.\n"
 
 extern int errno;
 
@@ -23,6 +24,10 @@ static void rerr(int rc);
 void run_busy(void)
 {
 	long ncpus = sysconf(_SC_NPROCESSORS_ONLN);
+	if (ncpus <= 0) {
+		fprintf(stderr, ECPU_MSG);
+		exit(EXIT_FAILURE);
+	}
 	int rc = crt_bglead();
 	if (rc == -1) {
 		fprintf(stderr, ELEAD_MSG);
