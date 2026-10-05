@@ -1,4 +1,4 @@
-cflags = -I ./include
+cflags = -D_POSIX_C_SOURCE=1 -D_XOPEN_SOURCE -I ./include
 
 #Release profile
 
