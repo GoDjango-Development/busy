@@ -47,6 +47,32 @@ This is a convenient way to run the CPU workload while continuously refreshing t
 
 The number of workers is therefore determined automatically by the system rather than being hard-coded.
 
+## Portability
+
+The source code is written using standardized POSIX/XSI interfaces rather than relying on Linux-specific APIs where possible.
+
+The build enables the following feature-test macros:
+
+```text
+_POSIX_C_SOURCE=1
+_XOPEN_SOURCE
+```
+
+`_POSIX_C_SOURCE=1` selects the historical POSIX.1 interface level corresponding to **POSIX.1-1990**.
+
+`_XOPEN_SOURCE`, when defined without a numeric value, enables the base X/Open interfaces without selecting a specific later X/Open/SUS revision. It should therefore not be interpreted as corresponding to a particular SUS version or year.
+
+The project intentionally avoids requiring later feature-test levels such as:
+
+```text
+_POSIX_C_SOURCE=200809L
+_XOPEN_SOURCE=700
+```
+
+where they are not necessary.
+
+This keeps the source requirements at an older standardized interface level while still allowing it to be compiled on modern POSIX-compatible systems.
+
 ## Example
 
 Run the stress test and monitor the CPU temperature:
@@ -84,7 +110,7 @@ sudo apt install lm-sensors
 
 Luis Miguel Arias
 
-lmdelbahia@gmail.com
+[lmdelbahia@gmail.com](mailto:lmdelbahia@gmail.com)
 
 ## Warning
 
