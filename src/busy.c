@@ -55,7 +55,7 @@ static void chld_busy(void)
 static void sig_intr(int signo)
 {
 	int saved_errno = errno;
-	kill(-bgpgid, SIGINT);
+	kill(-bgpgid, signo);
 	errno = saved_errno;
 }
 
