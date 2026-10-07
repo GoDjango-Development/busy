@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <wait.h>
+#include <sys/wait.h>
 #include <signal.h>
-#include <malloc.h>
+#include <busy.h>
 
 /* Errors */
 #define EFORK_MSG "Forking error. Program may continue running.\n"
@@ -15,7 +16,7 @@ static pid_t bgpgid;
 static void sig_intr(int signo);
 static void chld_busy(void);
 static int crt_bglead(void);
-static int crt_bgchilds(int ncpus);
+static int crt_bgchilds(long ncpus);
 
 void run_busy(void)
 {
@@ -66,9 +67,9 @@ static int crt_bglead(void)
 	return 0;
 }
 
-static int crt_bgchilds(int ncpus)
+static int crt_bgchilds(long ncpus)
 {
-	int c = 0;
+	long c = 0;
 	int rc = 0;
 	pid_t pid;
 	for (; c < ncpus; c++) {
