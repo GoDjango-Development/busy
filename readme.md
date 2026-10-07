@@ -11,14 +11,13 @@ The main purpose is to make it easy to observe how CPU temperature changes under
 Build the program:
 
 ```bash
-make prepare
 make
 ```
 
 Run it:
 
 ```bash
-./busy
+./release/busy
 ```
 
 In another terminal, monitor the CPU sensors:
@@ -30,7 +29,7 @@ watch -n 1 sensors
 You can also use `busy` together with `watch` in a pipeline:
 
 ```bash
-./busy | watch -n 1 sensors
+./release/busy | watch -n 1 sensors
 ```
 
 This is a convenient way to run the CPU workload while continuously refreshing the `sensors` output.
@@ -43,7 +42,7 @@ This is a convenient way to run the CPU workload while continuously refreshing t
 2. Creates one worker process for each CPU.
 3. Places the worker processes in the same process group.
 4. Each worker continuously consumes CPU time.
-5. `Ctrl+C` stops the workload.
+5. `Ctrl+C`, `kill`, or closing the terminal stops the workload and all worker processes.
 
 The number of workers is therefore determined automatically by the system rather than being hard-coded.
 
@@ -78,7 +77,7 @@ This keeps the source requirements at an older standardized interface level whil
 Run the stress test and monitor the CPU temperature:
 
 ```bash
-./busy | watch -n 1 sensors
+./release/busy | watch -n 1 sensors
 ```
 
 Example output:
