@@ -18,6 +18,7 @@ static void sig_intr(int signo);
 static void chld_busy(void);
 static int crt_bglead(void);
 static int crt_bgchilds(long ncpus, long *created);
+static void reap_child(pid_t pid);
 static void stop_bg(void);
 
 void run_busy(void)
@@ -84,7 +85,7 @@ static int crt_bglead(void)
 	else {
 		if (setpgid(pid, pid) == -1) {
 			kill(pid, SIGKILL);
-			while (waitpid(pid, NULL, 0) == -1 && errno == EINTR);
+			reap_child(pid);
 			return -1;
 		}
 		bgpgid = pid;
@@ -109,7 +110,7 @@ static int crt_bgchilds(long ncpus, long *created)
 		} else if (pid > 0) {
 			if (setpgid(pid, bgpgid) == -1) {
 				kill(pid, SIGKILL);
-				while (waitpid(pid, NULL, 0) == -1 && errno == EINTR);
+				reap_child(pid);
 				rc = -1;
 			} else
 				(*created)++;
@@ -119,8 +120,27 @@ static int crt_bgchilds(long ncpus, long *created)
 	return rc;
 }
 
+static void reap_child(pid_t pid)
+{
+	pid_t result;
+
+	/* Each retry makes a new waitpid() call, not a check of an old error. */
+	do {
+		result = waitpid(pid, NULL, 0);
+	} while (result == -1 && errno == EINTR);
+	/* An ignored SIGCHLD may leave no child status to collect. */
+	if (result == -1 && errno != ECHILD)
+		perror("waitpid");
+}
+
 static void stop_bg(void)
 {
+	pid_t result;
+
 	kill(-bgpgid, SIGKILL);
-	while (wait(NULL) > 0 || errno == EINTR);
+	do {
+		result = wait(NULL);
+	} while (result > 0 || (result == -1 && errno == EINTR));
+	if (result == -1 && errno != ECHILD)
+		perror("wait");
 }
