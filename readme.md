@@ -18,7 +18,7 @@ make
 Run it:
 
 ```bash
-./busy
+./release/busy
 ```
 
 In another terminal, monitor the CPU sensors:
@@ -30,7 +30,7 @@ watch -n 1 sensors
 You can also use `busy` together with `watch` in a pipeline:
 
 ```bash
-./busy | watch -n 1 sensors
+./release/busy | watch -n 1 sensors
 ```
 
 This is a convenient way to run the CPU workload while continuously refreshing the `sensors` output.
@@ -78,7 +78,7 @@ This keeps the source requirements at an older standardized interface level whil
 Run the stress test and monitor the CPU temperature:
 
 ```bash
-./busy | watch -n 1 sensors
+./release/busy | watch -n 1 sensors
 ```
 
 Example output:

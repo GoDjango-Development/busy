@@ -1,4 +1,5 @@
 cflags = -D_POSIX_C_SOURCE=1 -D_XOPEN_SOURCE -I ./include
+warnflags = -Wall -Wextra
 
 #Release profile
 
@@ -14,11 +15,11 @@ release_command = $(CCX) $(release_bin) $(obj) $(cflags)
 release: $(obj) $(hdr)
 	$(release_command)
 
-release/obj/main.o: src/main.c
-	$(CC) src/main.c -o release/obj/main.o $(cflags)
+release/obj/main.o: src/main.c include/busy.h
+	$(CC) src/main.c -o release/obj/main.o $(cflags) $(warnflags)
 
 release/obj/busy.o: src/busy.c include/busy.h
-	$(CC) src/busy.c -o release/obj/busy.o $(cflags)
+	$(CC) src/busy.c -o release/obj/busy.o $(cflags) $(warnflags)
 
 
 run: release
@@ -47,11 +48,11 @@ debug_command = $(CCGX) $(debug_bin) $(dbg) $(cflags)
 debug: $(dbg) $(hdr)
 	$(debug_command)
 
-debug/obj/main.o: src/main.c
-	$(CCG) src/main.c -o debug/obj/main.o $(cflags)
+debug/obj/main.o: src/main.c include/busy.h
+	$(CCG) src/main.c -o debug/obj/main.o $(cflags) $(warnflags)
 
 debug/obj/busy.o: src/busy.c include/busy.h
-	$(CCG) src/busy.c -o debug/obj/busy.o $(cflags)
+	$(CCG) src/busy.c -o debug/obj/busy.o $(cflags) $(warnflags)
 
 run_debug: debug
 ifneq ("$(wildcard $(debug_bin))","")
@@ -77,4 +78,3 @@ prepare:
 clean:
 	rm -R -f $(obj) $(dbg) release/obj/* debug/obj/*
 	rm -R -f $(release_bin) $(debug_bin)
-
