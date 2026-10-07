@@ -4,6 +4,7 @@
 #include <wait.h>
 #include <signal.h>
 #include <malloc.h>
+#include <errno.h>
 
 /* Errors */
 #define EFORK_MSG "Forking error. Program may continue running.\n"
@@ -33,7 +34,17 @@ void run_busy(void)
 	if (rc)
 		fprintf(stderr, EFORK_MSG);
 	signal(SIGINT, sig_intr);
-	while (wait(NULL) > 0);
+	for (;;) {
+		if (wait(NULL) > 0)
+			continue;
+		if (errno == EINTR)
+			continue;
+		if (errno != ECHILD) {
+			perror("wait");
+			exit(EXIT_FAILURE);
+		}
+		break;
+	}
 }
 
 static void chld_busy(void)
@@ -43,8 +54,9 @@ static void chld_busy(void)
 
 static void sig_intr(int signo)
 {
-	int c = 0;
+	int saved_errno = errno;
 	kill(-bgpgid, SIGINT);
+	errno = saved_errno;
 }
 
 static int crt_bglead(void)
